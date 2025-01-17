@@ -5,9 +5,10 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import javax.swing.*;
+import java.io.*;
 
 public class Dino extends JPanel implements ActionListener, KeyListener {
-    int boardWidth = 750;
+    int boardWidth = 800;
     int boardHeight = 500;
 
     Image dinosaurGif;
@@ -16,6 +17,8 @@ public class Dino extends JPanel implements ActionListener, KeyListener {
     Image cactus1Img;
     Image cactus2Img;
     Image cactus3Img;
+    Image gameOverImg;
+    Image resetImg;
 
 
     class Block{
@@ -46,7 +49,12 @@ public class Dino extends JPanel implements ActionListener, KeyListener {
     int cactusX = 700;
     int cactusY = boardHeight - cactusHeight;
     ArrayList<Block> cactusArr;
-
+//    game over
+    int gameOverWidth = 500;
+    int gameOverHeight = 60;
+//    reset
+    int resetWidth = 60;
+    int resetHeight = 60;
 //    physics
     int velocityY = 0;
     int velocityX = -10;
@@ -70,6 +78,8 @@ public class Dino extends JPanel implements ActionListener, KeyListener {
         cactus1Img = new ImageIcon(getClass().getResource("./img/cactus1.png")).getImage();
         cactus2Img = new ImageIcon(getClass().getResource("./img/cactus2.png")).getImage();
         cactus3Img = new ImageIcon(getClass().getResource("./img/cactus3.png")).getImage();
+        gameOverImg = new ImageIcon(getClass().getResource("./img/game-over.png")).getImage();
+        resetImg = new ImageIcon(getClass().getResource("./img/reset.png")).getImage();
 
 //        dinosaur
         dinosaur = new Block(dinoX, dinoY, dinoWidth, dinoHeight, dinosaurGif);
@@ -95,7 +105,6 @@ public class Dino extends JPanel implements ActionListener, KeyListener {
         if(gameOver) {
             return;
         }
-
         double spawnChance = Math.random();
         if(spawnChance > .99) {
             Block cactus = new Block(cactusX, cactusY, cactus3Width, cactusHeight, cactus3Img);
@@ -119,21 +128,38 @@ public class Dino extends JPanel implements ActionListener, KeyListener {
     }
 
     public void draw(Graphics g) {
+//        dino
         g.drawImage(dinosaur.image, dinosaur.x, dinosaur.y, dinosaur.width, dinosaur.height, null);
-
 //        cactus
         for (Block cactus : cactusArr) {
             g.drawImage(cactus.image, cactus.x, cactus.y, cactus.width, cactus.height, null);
         }
-
 //        score
         g.setColor(Color.darkGray);
-        g.setFont(new Font("Arial", Font.PLAIN, 30));
+        g.setFont(new Font("Futura", Font.PLAIN, 30));
         if(gameOver) {
-            g.drawString("Game Over:  " + String.valueOf(score), 250, 250);
+            g.drawString("Your Score:  " + String.valueOf(score), 290, 250);
+            g.drawImage(gameOverImg, 150, 100, gameOverWidth, gameOverHeight, null);
+            g.drawImage(resetImg, 370, 300, resetWidth, resetHeight, null);
         }
         else {
-            g.drawString("Score: " + String.valueOf(score), 25, 50);
+            g.drawString("Score: " + String.valueOf(score) + "   High score: " + String.valueOf(getHighScore()), 25, 50);
+        }
+    }
+
+    public static void saveHighScore(int score) {
+        try (PrintWriter writer = new PrintWriter("high-score.txt")) {
+            writer.println(score);
+        } catch (IOException e) {
+            System.err.println("Error saving high score: " + e.getMessage());
+        }
+    }
+
+    public static int getHighScore() {
+        try (BufferedReader reader = new BufferedReader(new FileReader("high-score.txt"))) {
+            return Integer.parseInt(reader.readLine().trim());
+        } catch (IOException | NumberFormatException e) {
+            return 0; // Default score if file is missing or invalid
         }
     }
 
@@ -157,6 +183,8 @@ public class Dino extends JPanel implements ActionListener, KeyListener {
 //        score
         score++;
     }
+
+
 
     boolean collision(Block a, Block b) {
         return a.x < b.x + b.width &&
@@ -192,6 +220,9 @@ public class Dino extends JPanel implements ActionListener, KeyListener {
             dinosaur.image = dinosaurGif;
             velocityY = 0;
             cactusArr.clear();
+            if(score > getHighScore()) {
+                saveHighScore(score);
+            }
             score = 0;
             gameOver = false;
             gameLoop.start();
