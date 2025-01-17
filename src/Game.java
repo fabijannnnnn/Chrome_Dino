@@ -3,7 +3,7 @@ import javax.swing.*;
 public class Game{
     public static void main(String[] args) throws Exception{
 
-        int boardWidth = 750;
+        int boardWidth = 800;
         int boardHeight = 500;
 
         JFrame frame = new JFrame("Chrome Dino");
