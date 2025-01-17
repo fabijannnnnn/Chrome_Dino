@@ -15,7 +15,6 @@ Press the SPACEBAR to jump or to start a new game.
 - java Game
 
 ## Features
-This game features a what appears to be running dinosaur along 
-with three types of cacti, score and high-score. 
-I plan on adding more features such as moving ground, clouds, 
-background and flying dinosaurs in the future. 
+- Running dinosaur with three types of cacti.
+- Tracks score and high-score.
+- Planned future features: moving ground, clouds, background, and flying dinosaurs.
