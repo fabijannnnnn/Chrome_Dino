@@ -55,6 +55,8 @@ public class Dino extends JPanel implements ActionListener, KeyListener {
 //    game loop
     Timer gameLoop;
     Timer placedCactusTimer;
+    boolean gameOver = false;
+    int score = 0;
 
     public Dino(){
         setPreferredSize(new Dimension(boardWidth, boardHeight));
@@ -90,16 +92,24 @@ public class Dino extends JPanel implements ActionListener, KeyListener {
     }
 
     public void placeCactus() {
+        if(gameOver) {
+            return;
+        }
+
         double spawnChance = Math.random();
         if(spawnChance > .99) {
             Block cactus = new Block(cactusX, cactusY, cactus3Width, cactusHeight, cactus3Img);
             cactusArr.add(cactus);
-        } else if(spawnChance > .70) {
+        } else if(spawnChance > .60) {
             Block cactus = new Block(cactusX, cactusY, cactus2Width, cactusHeight, cactus2Img);
             cactusArr.add(cactus);
-        } else if(spawnChance > .50) {
+        } else if(spawnChance > .40) {
             Block cactus = new Block(cactusX, cactusY, cactus1Width, cactusHeight, cactus1Img);
             cactusArr.add(cactus);
+        }
+//        getting rid of the off-screen cacti
+        if(cactusArr.size() > 5) {
+            cactusArr.remove(0);
         }
     }
 
@@ -115,6 +125,16 @@ public class Dino extends JPanel implements ActionListener, KeyListener {
         for (Block cactus : cactusArr) {
             g.drawImage(cactus.image, cactus.x, cactus.y, cactus.width, cactus.height, null);
         }
+
+//        score
+        g.setColor(Color.darkGray);
+        g.setFont(new Font("Arial", Font.PLAIN, 30));
+        if(gameOver) {
+            g.drawString("Game Over:  " + String.valueOf(score), 250, 250);
+        }
+        else {
+            g.drawString("Score: " + String.valueOf(score), 25, 50);
+        }
     }
 
     public void move() {
@@ -129,7 +149,13 @@ public class Dino extends JPanel implements ActionListener, KeyListener {
 //       cactus
         for (Block cactus : cactusArr) {
             cactus.x += velocityX;
+            if(collision(dinosaur, cactus)) {
+                dinosaur.image = dinosaurDeadImg;
+                gameOver = true;
+            }
         }
+//        score
+        score++;
     }
 
     boolean collision(Block a, Block b) {
@@ -143,6 +169,10 @@ public class Dino extends JPanel implements ActionListener, KeyListener {
     public void actionPerformed(ActionEvent e) {
         move();
         repaint();
+        if(gameOver) {
+            placedCactusTimer.stop();
+            gameLoop.stop();
+        }
     }
 
     @Override
@@ -156,6 +186,16 @@ public class Dino extends JPanel implements ActionListener, KeyListener {
                 velocityY = -17;
                 dinosaur.image = dinosaurJumpImg;
             }
+        }
+        if(gameOver) {
+            dinosaur.y = dinoY;
+            dinosaur.image = dinosaurGif;
+            velocityY = 0;
+            cactusArr.clear();
+            score = 0;
+            gameOver = false;
+            gameLoop.start();
+            placedCactusTimer.start();
         }
     }
 
