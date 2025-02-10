@@ -1,5 +1,5 @@
 # Chrome Dino
-A simplified version of the Dinosaur Game, also known as 
+A simple implementation of the Dinosaur Game, also known as 
 Chrome Dino, developed by Google.
 
 ## Usage
