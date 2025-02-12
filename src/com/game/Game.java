@@ -1,15 +1,13 @@
+package com.game;
 import javax.swing.*;
 
 public class Game{
-    public static void main(String[] args) throws Exception{
-
-        int boardWidth = 800;
-        int boardHeight = 500;
-
+    public static void main(String[] args)
+    {
         JFrame frame = new JFrame("Chrome Dino");
         frame.setVisible(true);
-        frame.setSize(boardWidth, boardHeight);
-        frame.setLocationRelativeTo(null);
+        frame.setSize(Dino.boardWidth, Dino.boardHeight);
+        frame.setLocationRelativeTo(null); // centers the screen
         frame.setResizable(false);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
