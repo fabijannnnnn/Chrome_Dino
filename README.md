@@ -1,6 +1,6 @@
 # Chrome Dino
 The Dinosaur Game (or Chrome Dino) is a browser game developed by Google in 2014. 
-You control a pixelated T-Rex that runs through a desert landscape, avoiding 
+You control a pixelated  T-Rex that runs through a desert landscape, avoiding 
 obstacles to get a high score.
 
 ## Usage
