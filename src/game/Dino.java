@@ -14,8 +14,9 @@ public class Dino extends JPanel implements ActionListener, KeyListener {
     final static int boardHeight = 500;
     Image dinosaurGif, dinosaurJumpImg, dinosaurDeadImg, cactus1Img, cactus2Img, cactus3Img, gameOverImg, resetImg;
 
-//    Block made static due to its independence on methods and attributes of the Dino class
-    static class Block{
+//    could be made static
+    class Block //Entity
+    {
         int m_X, m_Y, m_Width, m_Height;
         Image m_Image;
          Block(int x, int y, int width, int height, Image image){
@@ -33,26 +34,24 @@ public class Dino extends JPanel implements ActionListener, KeyListener {
     final int dinoX = 50;
     final int dinoY = boardHeight - dinoHeight;
     Block dinosaur;
-
 //    cactus
-    int cactus1Width = 34;
-    int cactus2Width = 68;
-    int cactus3Width = 102;
-    int cactusHeight = 69;
-    int cactusX = 700;
-    int cactusY = boardHeight - cactusHeight;
+    final int cactus1Width = 34;
+    final int cactus2Width = 68;
+    final int cactus3Width = 102;
+    final int cactusHeight = 69;
+    final int cactusX = 700;
+    final int cactusY = boardHeight - cactusHeight;
     ArrayList<Block> cactusArr;
 //    game over
-    int gameOverWidth = 500;
-    int gameOverHeight = 60;
+    int gameOverTxtWidth = 500;
+    int gameOverTxtHeight = 60;
 //    reset
-    int resetWidth = 60;
-    int resetHeight = 60;
+    int resetTxtWidth = 60;
+    int resetTxtHeight = 60;
 //    physics
     int velocityY = 0;
     int velocityX = -10;
     int gravity = 1;
-
 //    game loop
     Timer gameLoop, placedCactusTimer;
     boolean gameOver = false;
@@ -107,7 +106,7 @@ public class Dino extends JPanel implements ActionListener, KeyListener {
             cactusArr.add(cactus);
         }
 //        getting rid of the off-screen cacti
-        if(cactusArr.size() > 5)
+        if(cactusArr.size() > 4)
         {
             cactusArr.remove(0);
         }
@@ -134,8 +133,8 @@ public class Dino extends JPanel implements ActionListener, KeyListener {
         if(gameOver)
         {
             g.drawString("Your Score:  " + score, 290, 250);
-            g.drawImage(gameOverImg, 150, 100, gameOverWidth, gameOverHeight, null);
-            g.drawImage(resetImg, 370, 300, resetWidth, resetHeight, null);
+            g.drawImage(gameOverImg, 150, 100, gameOverTxtWidth, gameOverTxtHeight, null);
+            g.drawImage(resetImg, 370, 300, resetTxtWidth, resetTxtHeight, null);
         }
         else
             g.drawString("Score: " + score + "   High score: " + getHighScore(), 25, 50);
